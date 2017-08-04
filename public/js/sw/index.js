@@ -1,4 +1,4 @@
-let cacheName = 'wittr-static-v1'
+let cacheName = 'wittr-static-v2'
 self.addEventListener('install', function(event) {
   let urlsToCache = [
     '/',
@@ -15,12 +15,16 @@ self.addEventListener('install', function(event) {
   )
 })
 
+self.addEventListener('activate', function(event) {
+  caches.delete('wittr-static-v1')
+})
+
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      if(response) return response
+      if (response) return response
 
       return fetch(event.request)
-    })
+    }),
   )
 })
