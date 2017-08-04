@@ -17,15 +17,10 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    fetch(event.request)
-      .then(function(response) {
-        if (response.status === 404) {
-          return fetch('/imgs/dr-evil.gif')
-        }
-        return response
-      })
-      .catch(function() {
-        return new Response('Uh oh, that totally failed!')
-      }),
+    caches.match(event.request).then(function(response) {
+      if(response) return response
+
+      return fetch(event.request)
+    })
   )
 })
