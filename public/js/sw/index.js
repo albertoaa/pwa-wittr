@@ -1,8 +1,14 @@
-self.addEventListener('fetch', function(event) {
-  if(event.request.url.endsWith('.jpg')) {
-    event.respondWith(
-      fetch('/imgs/dr-evil.gif')
-    );
-  }
-
+self.addEventListener("fetch", function(event) {
+  event.respondWith(
+    fetch(event.request)
+      .then(function(response) {
+        if (response.status === 404) {
+          return fetch("/imgs/dr-evil.gif");
+        }
+        return response;
+      })
+      .catch(function() {
+        return new Response("Uh oh, that totally failed!");
+      })
+  );
 });
